@@ -36,6 +36,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,dishes.get(position).name,Toast.LENGTH_LONG).show()
             }
 
+        }, object:LongClickListener{
+            override fun longClick(viev: View, position: Int) {
+                Toast.makeText(applicationContext,dishes.get(position).name+" hoa",Toast.LENGTH_LONG).show()
+            }
+
         })
         rvDishList?.adapter = adapter
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
