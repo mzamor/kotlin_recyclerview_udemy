@@ -2,12 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:background="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/iv_dish"
         android:layout_width="match_parent"
         android:layout_height="289dp"
+        android:layout_marginTop="8dp"
         app:srcCompat="@drawable/barbecue" />
 
     <TextView
@@ -29,8 +32,9 @@
 
         <TextView
             android:id="@+id/tv_dish_price"
-            android:layout_width="104dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="$25"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="#4CAF50" />
@@ -38,8 +42,9 @@
         <RatingBar
             android:id="@+id/rb_dish_stars"
             style="@android:style/Widget.DeviceDefault.RatingBar.Small"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0"
             android:numStars="5"
             android:rating="3" />
     </LinearLayout>

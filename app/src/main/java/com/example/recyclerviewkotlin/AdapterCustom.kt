@@ -9,7 +9,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterCustom(var context: Context,dishes:ArrayList<Dish>):RecyclerView.Adapter<AdapterCustom.ViewHolder>() {
+class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:ClickListener):RecyclerView.Adapter<AdapterCustom.ViewHolder>() {
     var dishes:ArrayList<Dish>? = null
 
     init{
@@ -18,7 +18,7 @@ class AdapterCustom(var context: Context,dishes:ArrayList<Dish>):RecyclerView.Ad
 
     override fun onCreateViewHolder( parent: ViewGroup, viewType: Int): AdapterCustom.ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.template_dish,parent,false)
-        val viewHolder = ViewHolder(view)
+        val viewHolder = ViewHolder(view,listener)
 
         return viewHolder
     }
@@ -31,23 +31,29 @@ class AdapterCustom(var context: Context,dishes:ArrayList<Dish>):RecyclerView.Ad
         val dish = dishes?.get(position)
         holder.ivDish?.setImageResource(dish?.picture!!)
         holder.tvDishName?.setText(dish?.name)
-        holder.tvDishPrice?.setText(dish?.price.toString())
+        holder.tvDishPrice?.setText("$ "+dish?.price)
         holder.rbDishStars?.rating = dish?.rating!!
     }
 
-    class ViewHolder(view:View):RecyclerView.ViewHolder(view) {
+    class ViewHolder(view:View, listener: ClickListener):RecyclerView.ViewHolder(view), View.OnClickListener {
         var view = view
         var ivDish:ImageView? = null
         var tvDishName:TextView? = null
         var tvDishPrice:TextView? = null
         var rbDishStars:RatingBar? = null
+        var listener:ClickListener?=null
+
         init {
             ivDish = view.findViewById<ImageView>(R.id.iv_dish)
             tvDishName = view.findViewById<TextView>(R.id.tv_dish_name)
             tvDishPrice = view.findViewById<TextView>(R.id.tv_dish_price)
             rbDishStars = view.findViewById<RatingBar>(R.id.rb_dish_stars)
+            this.listener = listener
+            this.view.setOnClickListener(this)
         }
-
+        override fun onClick(v: View?) {
+            this.listener?.onClick(v!!, adapterPosition)
+        }
 
     }
 }
