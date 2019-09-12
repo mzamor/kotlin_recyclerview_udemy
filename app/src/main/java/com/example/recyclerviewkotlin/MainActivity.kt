@@ -67,11 +67,12 @@ class MainActivity : AppCompatActivity() {
 
         }, object:LongClickListener{
             override fun longClick(viev: View, position: Int) {
-                // Toast.makeText(applicationContext,dishes.get(position).name+" hoa",Toast.LENGTH_LONG).show()
                 if(!isActionMode){
                     startActionMode(callBack)
+                    adapter?.selectDish(position)
                     isActionMode=true
                 }else{
+                    adapter?.selectDish(position)
                 }
             }
 
