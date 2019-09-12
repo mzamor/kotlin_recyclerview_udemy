@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:ClickListener, var longListener:LongClickListener):RecyclerView.Adapter<AdapterCustom.ViewHolder>() {
     var dishes:ArrayList<Dish>? = null
     var dishesSelected:ArrayList<Int>? = null
-    var itemSelected = false
+    var multiSelection = false
+    var itemsSelected = 0
+
     var viewHolder:ViewHolder? = null
 
     init{
@@ -33,11 +35,11 @@ class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:Cl
     }
 
     fun initActionMode(){
-        itemSelected=true
+        multiSelection=true
     }
 
     fun finishActionMode(){
-        itemSelected=false
+        multiSelection=false
         for(dishSelected in dishesSelected!!){
             dishesSelected?.remove(dishSelected)
         }
@@ -45,21 +47,27 @@ class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:Cl
     }
 
     fun destroyActionMode(){
-        itemSelected=false
+        multiSelection=false
         dishesSelected?.clear()
         notifyDataSetChanged()
     }
 
 
     fun selectDish(position:Int){
-        if(itemSelected){
+        if(multiSelection){
             if(dishesSelected?.contains(position)!!){
+                itemsSelected--
                 dishesSelected?.remove(position)
             }else{
+                itemsSelected++
                 dishesSelected?.add(position)
             }
             notifyDataSetChanged()
         }
+    }
+
+    fun itemsSelected():Int{
+        return itemsSelected!!
     }
 
 

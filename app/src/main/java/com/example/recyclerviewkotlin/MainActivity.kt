@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     var adapter:AdapterCustom?= null
     var layoutManager: RecyclerView.LayoutManager? = null
     var swipeRefreshLayout: SwipeRefreshLayout? = null
+    var actionMode:ActionMode? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +31,15 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
 
-            override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+            override fun onCreateActionMode(mode: ActionMode?, p1: Menu?): Boolean {
                 adapter?.initActionMode()
+                actionMode = mode
                 isActionMode=true
                 return true
             }
 
-            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+            override fun onPrepareActionMode(mode: ActionMode?, p1: Menu?): Boolean {
+                mode?.title = "Objetos Seleccionados"
                 return false
             }
 
@@ -63,6 +66,15 @@ class MainActivity : AppCompatActivity() {
         adapter = AdapterCustom(this,dishes, object: ClickListener{
             override fun onClick(view: View, position: Int) {
                 Toast.makeText(applicationContext,dishes.get(position).name,Toast.LENGTH_LONG).show()
+                if(isActionMode){
+                    adapter?.selectDish(position)
+                }
+                actionMode?.title = adapter?.itemsSelected().toString() + " elementos seleccionados"
+
+                if(adapter?.itemsSelected()==0){
+                    actionMode?.finish()
+                }
+
             }
 
         }, object:LongClickListener{
@@ -71,11 +83,12 @@ class MainActivity : AppCompatActivity() {
                     startActionMode(callBack)
                     adapter?.selectDish(position)
                     isActionMode=true
-                }else{
-                    adapter?.selectDish(position)
+                }
+
+                if(adapter?.itemsSelected()==0){
+                    actionMode?.finish()
                 }
             }
-
         })
         rvDishList?.adapter = adapter
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
