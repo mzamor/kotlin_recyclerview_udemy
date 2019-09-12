@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 
 class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:ClickListener, var longListener:LongClickListener):RecyclerView.Adapter<AdapterCustom.ViewHolder>() {
     var dishes:ArrayList<Dish>? = null
+    var dishesSelected:ArrayList<Int>? = null
+    var itemSelected = false
+
 
     init{
         this.dishes = dishes
@@ -25,6 +28,21 @@ class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:Cl
 
     override fun getItemCount(): Int {
         return dishes?.count()!!
+    }
+
+
+    fun initActionMode(){
+        itemSelected=true
+    }
+
+    fun finishActionMode(){
+        itemSelected=false
+        notifyDataSetChanged()
+    }
+
+    fun destroyActionMode(){
+        itemSelected=false
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: AdapterCustom.ViewHolder, position: Int) {

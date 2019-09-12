@@ -2,6 +2,9 @@ package com.example.recyclerviewkotlin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 class MainActivity : AppCompatActivity() {
-
+    var isActionMode= false
     var rvDishList:RecyclerView? = null
     var adapter:AdapterCustom?= null
     var layoutManager: RecyclerView.LayoutManager? = null
@@ -18,6 +21,32 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val callBack = object: ActionMode.Callback{
+            override fun onActionItemClicked(mode: ActionMode?, p1: MenuItem?): Boolean {
+                adapter?.finishActionMode()
+                mode?.finish()
+                isActionMode=false
+                return true
+            }
+
+            override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                adapter?.initActionMode()
+                isActionMode=true
+                return true
+            }
+
+            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                return false
+            }
+
+            override fun onDestroyActionMode(p0: ActionMode?) {
+                adapter?.destroyActionMode()
+                isActionMode=false
+            }
+        }
+
+
 
         val dishes = ArrayList<Dish>()
 
@@ -38,7 +67,12 @@ class MainActivity : AppCompatActivity() {
 
         }, object:LongClickListener{
             override fun longClick(viev: View, position: Int) {
-                Toast.makeText(applicationContext,dishes.get(position).name+" hoa",Toast.LENGTH_LONG).show()
+                // Toast.makeText(applicationContext,dishes.get(position).name+" hoa",Toast.LENGTH_LONG).show()
+                if(!isActionMode){
+                    startActionMode(callBack)
+                    isActionMode=true
+                }else{
+                }
             }
 
         })
