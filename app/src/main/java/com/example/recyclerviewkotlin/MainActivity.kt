@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.DividerItemDecoration
+
 
 class MainActivity : AppCompatActivity() {
     var isActionMode= false
@@ -24,17 +26,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val callBack = object: ActionMode.Callback{
-            override fun onActionItemClicked(mode: ActionMode?, p1: MenuItem?): Boolean {
+            override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+
+                when(item?.itemId){
+                    R.id.idelete -> adapter?.deleteDishes()
+
+                    else-> {return true}
+                }
                 adapter?.finishActionMode()
                 mode?.finish()
                 isActionMode=false
                 return true
             }
 
-            override fun onCreateActionMode(mode: ActionMode?, p1: Menu?): Boolean {
+            override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
                 adapter?.initActionMode()
                 actionMode = mode
                 isActionMode=true
+                menuInflater.inflate(R.menu.contextual_menu,menu!!)
                 return true
             }
 
@@ -61,6 +70,9 @@ class MainActivity : AppCompatActivity() {
 
         rvDishList = findViewById(R.id.rv_dish_list)
         rvDishList?.setHasFixedSize(true)
+        rvDishList!!.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+
+
         layoutManager = LinearLayoutManager(this)
         rvDishList?.layoutManager = layoutManager
         adapter = AdapterCustom(this,dishes, object: ClickListener{

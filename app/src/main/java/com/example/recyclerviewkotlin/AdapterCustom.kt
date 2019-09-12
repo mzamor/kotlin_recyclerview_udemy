@@ -70,6 +70,16 @@ class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:Cl
         return itemsSelected!!
     }
 
+    fun deleteDishes(){
+        if(itemsSelected()>0){
+            var itemsDeleted = ArrayList<Dish>()
+            for(item in dishesSelected!!){
+                itemsDeleted.add(dishes?.get(item)!!)
+            }
+            dishes?.removeAll(itemsDeleted)
+            dishesSelected?.clear()
+        }
+    }
 
     override fun onBindViewHolder(holder: AdapterCustom.ViewHolder, position: Int) {
         val dish = dishes?.get(position)
