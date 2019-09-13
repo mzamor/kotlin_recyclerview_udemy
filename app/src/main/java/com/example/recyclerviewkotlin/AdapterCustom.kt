@@ -54,6 +54,7 @@ class AdapterCustom(
     fun destroyActionMode() {
         multiSelection = false
         dishesSelected?.clear()
+        itemsSelected = 0
         notifyDataSetChanged()
     }
 
@@ -82,6 +83,7 @@ class AdapterCustom(
             }
             dishes?.removeAll(itemsDeleted)
             dishesSelected?.clear()
+            itemsSelected = 0
         }
     }
 
