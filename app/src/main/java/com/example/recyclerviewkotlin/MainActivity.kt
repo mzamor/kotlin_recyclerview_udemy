@@ -58,8 +58,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-
         val dishes = ArrayList<Dish>()
 
         dishes.add(Dish("Barbecue",300.00,4.00F,R.drawable.barbecue))
@@ -81,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 if(isActionMode){
                     adapter?.selectDish(position)
                 }
-                actionMode?.title = adapter?.itemsSelected().toString() + " elementos seleccionados"
+                actionMode?.title = "${adapter?.itemsSelected().toString()} elementos seleccionados"
 
                 if(adapter?.itemsSelected()==0){
                     actionMode?.finish()
@@ -95,6 +93,7 @@ class MainActivity : AppCompatActivity() {
                     startActionMode(callBack)
                     adapter?.selectDish(position)
                     isActionMode=true
+                    actionMode?.title = "${adapter?.itemsSelected().toString()} elementos seleccionados"
                 }
 
                 if(adapter?.itemsSelected()==0){
