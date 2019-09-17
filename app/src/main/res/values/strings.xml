@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">recyclerView Kotlin</string>
+    <string name="items_selected">%s elementos seleccionados</string>
 </resources>

@@ -10,22 +10,27 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:ClickListener, var longListener:LongClickListener):RecyclerView.Adapter<AdapterCustom.ViewHolder>() {
-    var dishes:ArrayList<Dish>? = null
-    var dishesSelected:ArrayList<Int>? = null
+class AdapterCustom(
+    var context: Context,
+    dishes: ArrayList<Dish>,
+    var listener: ClickListener,
+    var longListener: LongClickListener
+) : RecyclerView.Adapter<AdapterCustom.ViewHolder>() {
+    var dishes: ArrayList<Dish>? = null
+    var dishesSelected: ArrayList<Int>? = null
     var multiSelection = false
     var itemsSelected = 0
 
-    var viewHolder:ViewHolder? = null
+    var viewHolder: ViewHolder? = null
 
-    init{
+    init {
         this.dishes = dishes
         this.dishesSelected = ArrayList()
     }
 
-    override fun onCreateViewHolder( parent: ViewGroup, viewType: Int): AdapterCustom.ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.template_dish,parent,false)
-        viewHolder = ViewHolder(view,listener, longListener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterCustom.ViewHolder {
+        val view = LayoutInflater.from(context).inflate(R.layout.template_dish, parent, false)
+        viewHolder = ViewHolder(view, listener, longListener)
 
         return viewHolder!!
     }
@@ -34,31 +39,31 @@ class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:Cl
         return dishes?.count()!!
     }
 
-    fun initActionMode(){
-        multiSelection=true
+    fun initActionMode() {
+        multiSelection = true
     }
 
-    fun finishActionMode(){
-        multiSelection=false
-        for(dishSelected in dishesSelected!!){
+    fun finishActionMode() {
+        multiSelection = false
+        for (dishSelected in dishesSelected!!) {
             dishesSelected?.remove(dishSelected)
         }
         notifyDataSetChanged()
     }
 
-    fun destroyActionMode(){
-        multiSelection=false
+    fun destroyActionMode() {
+        multiSelection = false
         dishesSelected?.clear()
+        itemsSelected = 0
         notifyDataSetChanged()
     }
 
-
-    fun selectDish(position:Int){
-        if(multiSelection){
-            if(dishesSelected?.contains(position)!!){
+    fun selectDish(position: Int) {
+        if (multiSelection) {
+            if (dishesSelected?.contains(position)!!) {
                 itemsSelected--
                 dishesSelected?.remove(position)
-            }else{
+            } else {
                 itemsSelected++
                 dishesSelected?.add(position)
             }
@@ -66,18 +71,19 @@ class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:Cl
         }
     }
 
-    fun itemsSelected():Int{
+    fun itemsSelected(): Int {
         return itemsSelected!!
     }
 
-    fun deleteDishes(){
-        if(itemsSelected()>0){
+    fun deleteDishes() {
+        if (itemsSelected() > 0) {
             var itemsDeleted = ArrayList<Dish>()
-            for(item in dishesSelected!!){
+            for (item in dishesSelected!!) {
                 itemsDeleted.add(dishes?.get(item)!!)
             }
             dishes?.removeAll(itemsDeleted)
             dishesSelected?.clear()
+            itemsSelected = 0
         }
     }
 
@@ -85,24 +91,25 @@ class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:Cl
         val dish = dishes?.get(position)
         holder.ivDish?.setImageResource(dish?.picture!!)
         holder.tvDishName?.setText(dish?.name)
-        holder.tvDishPrice?.setText("$ "+dish?.price)
+        holder.tvDishPrice?.setText("$ " + dish?.price)
         holder.rbDishStars?.rating = dish?.rating!!
 
-        if(dishesSelected?.contains(position)!!){
+        if (dishesSelected?.contains(position)!!) {
             holder?.view.setBackgroundColor(Color.LTGRAY)
-        }else{
+        } else {
             holder?.view.setBackgroundColor(Color.WHITE)
         }
     }
 
-    class ViewHolder(view:View, listener: ClickListener, longListener: LongClickListener):RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
+    class ViewHolder(view: View, listener: ClickListener, longListener: LongClickListener) :
+        RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
         var view = view
-        var ivDish:ImageView? = null
-        var tvDishName:TextView? = null
-        var tvDishPrice:TextView? = null
-        var rbDishStars:RatingBar? = null
-        var listener:ClickListener?=null
-        var longListener:LongClickListener?=null
+        var ivDish: ImageView? = null
+        var tvDishName: TextView? = null
+        var tvDishPrice: TextView? = null
+        var rbDishStars: RatingBar? = null
+        var listener: ClickListener? = null
+        var longListener: LongClickListener? = null
 
         init {
             ivDish = view.findViewById<ImageView>(R.id.iv_dish)
@@ -114,12 +121,13 @@ class AdapterCustom(var context: Context,dishes:ArrayList<Dish>, var listener:Cl
             this.longListener = longListener
             this.view.setOnLongClickListener(this)
         }
+
         override fun onClick(v: View?) {
             this.listener?.onClick(v!!, adapterPosition)
         }
 
         override fun onLongClick(v: View?): Boolean {
-            this.longListener?.longClick(v!!,adapterPosition)
+            this.longListener?.longClick(v!!, adapterPosition)
             return true
         }
 
